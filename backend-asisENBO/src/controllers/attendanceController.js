@@ -1,0 +1,178 @@
+const { 
+    attendanceCreate, 
+    attendanceUpdate, 
+    attendanceDelete, 
+    getAttendanceById, 
+    attendanceGetAll 
+} = require("../services/attendanceService");
+const Response = require("../functions/response");
+
+// Obtener todas las asistencias
+const getAllAttendances = async (req, res) => {
+    try {
+        const attendances = await attendanceGetAll();
+        const response = new Response("Registros de asistencias obtenidos exitosamente", attendances, null);
+        res.status(200);
+        res.json(response.json);
+    } catch (error) {
+        console.error("Error en getAllAttendances:", error);
+        const errorResponse = new Response("Error interno del servidor", null, [
+            { message: error.message || "Ocurrió un error inesperado" }
+        ]);
+        res.status(500);
+        res.json(errorResponse.json);
+    }
+};
+
+// Obtener una asistencia por ID
+const getAttendanceByIdController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        var errors = [];
+        
+        if (!id) {
+            errors.push("El ID de la asistencia es obligatorio");
+        }
+        
+        if (errors.length > 0) {
+            var response = new Response("Error al obtener la asistencia", null, errors);
+            res.status(400);
+            res.json(response.json);
+            return;
+        }
+        
+        const attendance = await getAttendanceById(id);
+        var response = new Response(`Asistencia ${id} obtenida exitosamente`, attendance, null);
+        res.status(200);
+        res.json(response.json);
+    } catch (error) {
+        console.error("Error en getAttendanceByIdController:", error);
+        const errorResponse = new Response("Error interno del servidor", null, [
+            { message: error.message || "Ocurrió un error inesperado" }
+        ]);
+        res.status(500);
+        res.json(errorResponse.json);
+    }
+};
+
+// Crear una nueva asistencia
+const createAttendance = async (req, res) => {
+    try {
+        const { studentId, status, date } = req.body;
+        
+        var errors = [];
+
+        // Validaciones
+        if (!studentId) {
+            errors.push("El ID del estudiante es obligatorio");
+        }
+        if (!status || !['present', 'absent'].includes(status)) {
+            errors.push("El estado es obligatorio y debe ser 'present' o 'absent'");
+        }
+
+        if (errors.length > 0) {
+            var response = new Response("Error al crear la asistencia", null, errors);
+            res.status(400);
+            res.json(response.json);
+            return;
+        }
+
+        const data = { 
+            studentId, 
+            status,
+            date: date || new Date().toISOString().split('T')[0]
+        };
+        
+        const attendance = await attendanceCreate(data);
+        var response = new Response("Asistencia creada exitosamente", attendance, null);
+        res.status(201);
+        res.json(response.json);
+    } catch (error) {
+        console.error("Error en createAttendance:", error);
+        const errorResponse = new Response("Error interno del servidor", null, [
+            { message: error.message || "Ocurrió un error inesperado" }
+        ]);
+        res.status(500);
+        res.json(errorResponse.json);
+    }
+};
+
+// Actualizar una asistencia
+const updateAttendance = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { studentId, status, date } = req.body;
+        
+        var errors = [];
+
+        if (!id) {
+            errors.push("El ID de la asistencia es obligatorio");
+        }
+        if (status && !['present', 'absent'].includes(status)) {
+            errors.push("El estado debe ser 'present' o 'absent'");
+        }
+
+        if (errors.length > 0) {
+            var response = new Response("Error al actualizar la asistencia", null, errors);
+            res.status(400);
+            res.json(response.json);
+            return;
+        }
+
+        const data = {};
+        if (studentId) data.studentId = studentId;
+        if (status) data.status = status;
+        if (date) data.date = date;
+        
+        const attendance = await attendanceUpdate(id, data);
+        var response = new Response(`Asistencia ${id} actualizada exitosamente`, attendance, null);
+        res.status(200);
+        res.json(response.json);
+    } catch (error) {
+        console.error("Error en updateAttendance:", error);
+        const errorResponse = new Response("Error interno del servidor", null, [
+            { message: error.message || "Ocurrió un error inesperado" }
+        ]);
+        res.status(500);
+        res.json(errorResponse.json);
+    }
+};
+
+// Eliminar una asistencia
+const deleteAttendance = async (req, res) => {
+    try {
+        const { id } = req.params;
+        var errors = [];
+        
+        if (!id) {
+            errors.push("El ID de la asistencia es obligatorio");
+        }
+        
+        if (errors.length > 0) {
+            var response = new Response("Error al eliminar la asistencia", null, errors);
+            res.status(400);
+            res.json(response.json);
+            return;
+        }
+        
+        await attendanceDelete(id);
+        var response = new Response(`Asistencia ${id} eliminada exitosamente`, { id }, null);
+        res.status(200);
+        res.json(response.json);
+    } catch (error) {
+        console.error("Error en deleteAttendance:", error);
+        const errorResponse = new Response("Error interno del servidor", null, [
+            { message: error.message || "Ocurrió un error inesperado" }
+        ]);
+        res.status(500);
+        res.json(errorResponse.json);
+    }
+};
+
+module.exports = {
+    getAllAttendances,
+    getAttendanceByIdController,
+    createAttendance,
+    updateAttendance,
+    deleteAttendance
+};
