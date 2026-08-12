@@ -1,5 +1,6 @@
 const express = require("express");
 
+const cors = require("cors");
 //rutas
 const attendanceRoutes = require("./routes/attendanceRoute");
 const studentRoutes = require("./routes/studentRoute");
@@ -8,6 +9,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(cors());
 //ruta base
 app.get("/", (req, res) => {
     res.json({ message: "Bienvenido a la API de asisENBO" });
