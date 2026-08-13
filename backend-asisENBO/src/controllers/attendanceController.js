@@ -58,16 +58,21 @@ const getAttendanceByIdController = async (req, res) => {
 // Crear una nueva asistencia
 const createAttendance = async (req, res) => {
     try {
-        const { studentId, status, date } = req.body;
+        const { name, status, date, hasExcuse, observacion } = req.body;
         
         var errors = [];
 
         // Validaciones
-        if (!studentId) {
-            errors.push("El ID del estudiante es obligatorio");
+        if (!name) {
+            errors.push("El nombre del estudiante es obligatorio");
         }
-        if (!status || !['present', 'absent'].includes(status)) {
-            errors.push("El estado es obligatorio y debe ser 'present' o 'absent'");
+        if (!status || !['presente', 'ausente'].includes(status)) {
+            errors.push("El estado es obligatorio y debe ser 'presente' o 'ausente'");
+        }
+
+        // Validación: si tiene excusa, la observación es obligatoria
+        if (hasExcuse && !observacion) {
+            errors.push("La observación es obligatoria cuando el estudiante tiene excusa");
         }
 
         if (errors.length > 0) {
@@ -78,9 +83,11 @@ const createAttendance = async (req, res) => {
         }
 
         const data = { 
-            studentId, 
+            name,
             status,
-            date: date || new Date().toISOString().split('T')[0]
+            date: date || new Date().toISOString().split('T')[0],
+            hasExcuse: hasExcuse || false,
+            observacion: observacion || null
         };
         
         const attendance = await attendanceCreate(data);
@@ -101,15 +108,20 @@ const createAttendance = async (req, res) => {
 const updateAttendance = async (req, res) => {
     try {
         const { id } = req.params;
-        const { studentId, status, date } = req.body;
+        const { name, status, date, hasExcuse, observacion } = req.body;
         
         var errors = [];
 
         if (!id) {
             errors.push("El ID de la asistencia es obligatorio");
         }
-        if (status && !['present', 'absent'].includes(status)) {
-            errors.push("El estado debe ser 'present' o 'absent'");
+        if (status && !['presente', 'ausente'].includes(status)) {
+            errors.push("El estado debe ser 'presente' o 'ausente'");
+        }
+
+        // Validación: si tiene excusa, la observación es obligatoria
+        if (hasExcuse && !observacion) {
+            errors.push("La observación es obligatoria cuando el estudiante tiene excusa");
         }
 
         if (errors.length > 0) {
@@ -120,9 +132,11 @@ const updateAttendance = async (req, res) => {
         }
 
         const data = {};
-        if (studentId) data.studentId = studentId;
+        if (name) data.name = name;
         if (status) data.status = status;
         if (date) data.date = date;
+        if (hasExcuse !== undefined) data.hasExcuse = hasExcuse;
+        if (observacion !== undefined) data.observacion = observacion;
         
         const attendance = await attendanceUpdate(id, data);
         var response = new Response(`Asistencia ${id} actualizada exitosamente`, attendance, null);
