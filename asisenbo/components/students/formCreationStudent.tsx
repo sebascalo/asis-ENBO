@@ -35,7 +35,7 @@ export default function CreateStudent() {
             const resJson = await response.json();
 
             if (response.ok) {
-                setSuccess("✅ Estudiante registrado");
+                setSuccess("✅ Aprendiz registrado");
                 setName("");
                 setLastName("");
                 setDocumentType("CC");
@@ -58,13 +58,13 @@ export default function CreateStudent() {
     };
 
     return (
-        <div className="min-h-screen p-6 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="min-h-screen">
             
             <div className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
 
                 <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold text-gray-800">
-                        Crear Estudiante
+                        Crear Aprendiz
                     </h2>
                 </div>
 
@@ -166,7 +166,7 @@ export default function CreateStudent() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center">
@@ -177,7 +177,7 @@ export default function CreateStudent() {
                                     Guardando...
                                 </span>
                             ) : (
-                                "Guardar Estudiante"
+                                "Guardar Aprendiz"
                             )}
                         </button>
                     </div>
