@@ -26,15 +26,15 @@ DROP TABLE IF EXISTS `attendances`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attendances` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `studentId` int NOT NULL,
-  `date` date NOT NULL DEFAULT (curdate()),
-  `status` enum('present','absent') NOT NULL DEFAULT 'absent',
-  `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_attendance` (`studentId`,`date`),
-  CONSTRAINT `attendances_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `status` enum('presente','ausente') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ausente',
+  `hasExcuse` tinyint(1) NOT NULL DEFAULT '0',
+  `observacion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,7 +54,7 @@ CREATE TABLE `students` (
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `documentNumber` (`documentNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -66,4 +66,4 @@ CREATE TABLE `students` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-12  9:00:37
+-- Dump completed on 2026-08-13 13:35:17
