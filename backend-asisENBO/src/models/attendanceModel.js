@@ -1,14 +1,14 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/conectionDB');
 
-const Attendance = db.define('Attendance', {
+const Attendance = db.define('attendance', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    studentId: {
-        type: DataTypes.INTEGER,
+    name: {
+        type: DataTypes.STRING(100),
         allowNull: false
     },
     date: {
@@ -20,6 +20,16 @@ const Attendance = db.define('Attendance', {
         type: DataTypes.ENUM('presente', 'ausente'),
         allowNull: false,
         defaultValue: 'ausente'
+    },
+    hasExcuse: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
+    observacion: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        defaultValue: null
     },
     createdAt: {
         type: DataTypes.DATE,

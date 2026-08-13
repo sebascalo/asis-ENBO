@@ -37,14 +37,14 @@ export default function TableStudents() {
     }, []);
 
     const handleDelete = async (id: number) => {
-        if (!confirm('¿Estás seguro de eliminar este estudiante?')) return;
+        if (!confirm('¿Estás seguro de eliminar este aprendiz?')) return;
         try {
             const response = await fetch(`http://localhost:3000/api/student/DeleteStudent/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
                 setStudents(students.filter((student: any) => student.id !== id));
-                alert('✅ Estudiante eliminado');
+                alert('✅ Aprendiz eliminado');
             } else {
                 alert('❌ Error al eliminar');
             }
@@ -135,14 +135,14 @@ export default function TableStudents() {
 
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-black">
-                    Lista de Estudiantes
+                    Lista de Aprendices
                 </h2>
                 <button
                     onClick={() => router.push('/dashboard/students/formStudents')}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
                 >
                     <Plus size={16} />
-                    Nuevo Estudiante
+                    Aprendiz
                 </button>
             </div>
 
@@ -193,7 +193,7 @@ export default function TableStudents() {
                     ) : (
                         <tr>
                             <td colSpan={7} className="border border-border px-4 py-6 text-center text-black">
-                                No hay estudiantes registrados.
+                                No hay aprendices registrados.
                             </td>
                         </tr>
                     )}
@@ -209,7 +209,7 @@ export default function TableStudents() {
                         {/* Header del modal */}
                         <div className="flex justify-between items-center p-6 border-b border-gray-200">
                             <h3 className="text-2xl font-bold text-gray-800">
-                                Editar Estudiante
+                                Editar Aprendiz
                             </h3>
                         </div>
 
@@ -303,7 +303,7 @@ export default function TableStudents() {
                                     <button
                                         type="submit"
                                         disabled={editLoading}
-                                        className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {editLoading ? (
                                             <span className="flex items-center justify-center">
@@ -314,7 +314,7 @@ export default function TableStudents() {
                                                 Actualizando...
                                             </span>
                                         ) : (
-                                            "Actualizar Estudiante"
+                                            "Actualizar Aprendiz"
                                         )}
                                     </button>
                                 </div>
